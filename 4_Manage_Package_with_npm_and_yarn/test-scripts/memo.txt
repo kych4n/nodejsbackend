@@ -1,0 +1,7 @@
+스크립트 기능은 package.json의 scripts 부분에 정의된 명령어를 실행한다. 명령어와 그에 따른 터미널에서 실행될 동작을 정의한다.
+대표적으로 start, stop, build, deploy, test 등의 명령어가 있다.
+
+명령어 앞에 pre, 명령어 뒤에 post를 붙인 명령어가 있으면, 순서대로 3개를 실행한다.
+
+스크립트 기능은 npm run [script 명령어]로 가능하지만, start, stop, test, restart는 run을 빼도 가능하다.
+

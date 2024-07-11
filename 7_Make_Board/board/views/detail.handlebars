@@ -1,0 +1,125 @@
+<h1>{{title}}</h1>
+{{#with post}}
+<h2>{{title}}</h2>
+<div>
+    Writer : <b>{{writer}}</b>
+</div>
+<div>
+    hits : <b>{{hits}} | Date : {{dateString createdDt}}</b>
+    <button onclick="modifyPost()">Modify</button>
+    <button onclick="deletePost()">Delete</button>
+</div>
+
+<div>
+    <pre>{{content}}</pre> <!-- 미리 정의된 형식으로 텍스트 표현 -->
+</div>
+
+<section>
+    <div>
+        <h3>There are {{lengthOfList comments}} comments.</h3>
+    </div>
+    <form method="post" action="/write-comment">
+        <input type="hidden" name="id" value="{{_id}}"> <!-- with 내부에 있으므로 바로 사용 가능-->
+        <input type="text" name="writer" placeholder="Writer">
+        <input type="password" name="password" placeholder="Password"><br />
+        <textarea name="comment" rows="3" cols="45" placeholder="Comment"></textarea><br />
+        <button>Submit</button>
+    </form>
+</section>
+
+<section>
+    {{#each comments}}
+    <div>
+        Comment Writer : <b>{{writer}}</b>
+    </div>
+    <div>
+        Date : {{dateString createdDt}}
+    </div>
+    <div>
+        {{comment}}
+    </div>
+    <div>
+        <button onclick="deleteComment('{{idx}}')">Delete</button>
+    </div>
+    {{/each}}
+</section>
+{{/with}}
+
+<footer>
+    <div>
+        <a href="/">Go to home</a>
+    </div>
+</footer>
+<script>
+    const postOption = {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+    }
+
+    const deleteOption = {
+        method: "DELETE",
+        headers: {
+            "Content-Type": "application/json",
+        }
+    }
+
+    async function modifyPost() {
+        const password = prompt("Enter the password.");
+        if (!password){
+            return;
+        }
+
+        const result = await fetch("/check-password", { // ...은 나열 연산자, http 프로토콜로 전달할 때는 문자열로 변경해야 함, 키:값 형태가 아닐 경우, 자동으로 변수명:값으로 생성됨
+      ...postOption,
+      body: JSON.stringify({ id: "{{post._id}}", password })
+    });
+
+        const data = await result.json();
+
+        if (data.isExist) {
+        document.location = "/modify/{{post._id}}"
+        } else {
+        alert("not correct password!");
+        }
+    }
+
+    async function deletePost() {
+        const password = prompt("Enter the password to delete");
+        if (!password){
+            return;
+        }
+        const result = await fetch("/delete", { // ...은 나열 연산자, http 프로토콜로 전달할 때는 문자열로 변경해야 함, 키:값 형태가 아닐 경우, 자동으로 변수명:값으로 생성됨
+      ...deleteOption,
+      body: JSON.stringify({ id: "{{post._id}}", password })
+    });
+
+        const data = await result.json();
+
+        if (!data.isSuccess) {
+            alert("Fail to delete. Check your password");
+            return;
+        } 
+        document.location = "/";
+    }
+
+    async function deleteComment(idx) {
+        const password = prompt("Enter the password to delete");
+        if (!password){
+            return;
+        }
+        const result = await fetch("/delete-comment", {
+            ...deleteOption,
+            body: JSON.stringify({id:"{{post._id}}", idx, password})
+        });
+
+        const data = await result.json();
+        if (!data.isSuccess) {
+            alert("Fail to delete. Check your password");
+            return;
+        } 
+        alert("Success to delete");
+        document.location.reload();
+    }
+</script>

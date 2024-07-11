@@ -1,0 +1,30 @@
+@server = http://localhost:3000
+
+###
+POST {{server}}/user/create
+Content-Type: application/json
+
+{
+    "username": "Tom",
+    "password": "1234",
+    "email": "tom"
+}
+
+###
+GET {{server}}/user/getUser/tom@naver.com
+
+###
+PUT {{server}}/user/update/tom@naver.com
+Content-Type: application/json
+
+{
+    "email": "toom@naver.net",
+    "username": "Toom",
+    "password": "1111"
+}
+
+###
+DELETE {{server}}/user/delete/tom@naver.com
+
+###
+DELETE {{server}}/user/delete/toom@daum.net

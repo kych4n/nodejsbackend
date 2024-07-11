@@ -1,0 +1,1 @@
+npm install [package] 했을 때, package.json의 dependencies에 추가되고, node_modules에 설치되는 것을 알 수 있음.

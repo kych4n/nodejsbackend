@@ -1,0 +1,8 @@
+NPX는 Node Package eXecute의 약자로 Node 패키지 실행자라고도 한다. Node 패키지는 대부분 프로젝트에 import해서 사용하지만,
+
+개발하는 과정에서 실행, 관리, 테스트 등에 명령형 패키지를 다수 사용한다. 대표적으로 prettier, eslint, jest 같은 포매팅, 문법 검사, 단위 테스트 도구들이 있다.
+이러한 패키지를 실행하려면 node_modules/.bin/[패키지명] 경로로 명령어를 실행해야 하므로 불편함이 있다. npx를 사용하면, npx [패키지명]으로 경로를 생략해 실행시킬 수 있다.
+
+prettier을 예로 들자면, prettier 디렉토리의 package.json에 있는 bin 설정에 있는 동작을 실행한다.
+
+npm prettier index.js를 사용하면 결과가 출력되지만 반영은 되지 않는다. 반영하려면 npm prettier -w index.js

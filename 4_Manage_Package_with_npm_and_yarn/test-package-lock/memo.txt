@@ -1,0 +1,19 @@
+package.json에 의존성 정보가 있는데, package-lock.json이 존재하는 이유는 package.json에 범위를 지정하여 설치하면
+설치 시점에 따라 다른 버전이 설치되는데, npm은 호환성 검증을 제대로 하지 않으므로 버전에 따라 동작되지 않을 수 있기 때문이다.
+해결방법은 올바르게 동작하는 버전을 고정하는 package-lock.json을 참고하여 설치하는 것이다.
+
+npm install ora를 해보면, 하나의 패키지를 설치하라고 명령했지만, 18개의 패키지가 설치된다. ora가 의존하는 패키지가 같이 설치되기 때문이다.
+
+npm ls --depth=1을 통해 의존성 트리의 1단계 의존성을 확인할 수 있다. deduped는 중복되었으므로 삭제되었다는 것을 의미한다.
+
+A가 B, C가 D에 의존하고, B와 D가 같은 패키지이고 버전이 같다면, node_modules 디렉토리에 설치된다. 
+B와 D의 같은 패키지이고 버전이 다르다면, depth가 낮은 버전은 node_modules에, depth가 높은 버전은 패키지의 하위에 설치된다.
+
+이런 식으로 트리 구조로 복잡하게 얽혀 있던 것을 하나로 모아 평평하게 관리할 수 있다. 하지만 참고하는 node_modules이 하나가 아니고 그것을 실행하는 알고리즘은 매우 복잡하다.
+또한, ora의 package.json의 dependencies에는 없는 패키지를 사용할 수 있게 해준다. 이를 phantom dependency라고 한다. 정의하지 않았는데, 사용할 수 있다는 것도 직관적인 부분에서는 좋지 않다.
+
+package-lock.json을 살펴보면, lockfileVersion이 1이면 npm 버전 5, 6, dependencies 필요 / 2이면 npm 버전 7 이후 packages 필요
+
+npm install은 package.json 정보를 참고하여 의존성 패키지를 설치하고, package-lock.json을 업데이트한다. 
+npm ci 명령어를 사용하면, package.json과 package-lock.json의 패키지 버전이 일치하는지 확인하고 맞지 않으면 에러를 발생시킨다. 
+또한, 의존성 패키지가 저장되어 있는 node_modules 디렉토리를 삭제 후, 모든 의존성 패키지를 다시 설치하므로, 개별 의존성 패키지를 설치하는 용도로는 맞지 않다.
