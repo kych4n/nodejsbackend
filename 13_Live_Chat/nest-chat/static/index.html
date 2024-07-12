@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Simple Nest Chat</title>
+    </head>
+    <body>
+        <h2>Simple Nest Chat</h2>
+
+        <div>
+            <h2>Chatting Room List</h2>
+            <ul id="rooms"></ul>
+        </div>
+
+        <div id="chat"></div>
+
+        <input type="text" id="message" placeholder="Enter the message">
+        <button onclick="sendMessage()">Send</button>
+        <button onclick="createRoom()">Create Room</button>
+
+        <div>
+            <h2>Notice</h2>
+            <div id="notice"></div>
+        </div>
+    </body>
+
+    <script src="https://code.jquery.com/jquery-3.6.1.slim.js"></script>
+    <script src="http://localhost:3000/socket.io/socket.io.js"></script>
+    <script src="http://localhost:3000/script.js"></script>
+
+</html>
